@@ -1,0 +1,8 @@
+{
+  "name": "Gold Signals",
+  "description": "Professional XAUUSD gold trading signals for the Exness platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
