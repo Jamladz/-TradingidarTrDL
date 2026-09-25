@@ -30,7 +30,15 @@ If you want to add server-side logic (like validating Telegram data):
 1. Create a `functions/api` directory.
 2. Add your Worker code there. Cloudflare Pages will automatically detect and deploy them as Functions.
 
-## Environment Variables
+## Troubleshooting
+
+### "Unknown lockfile version" Error
+If you see an error related to `bun.lock` or `Unknown lockfile version`:
+1. I have removed the `bun.lock` file from the project to avoid version conflicts on Cloudflare.
+2. Cloudflare will now default to `npm install`.
+3. In the Cloudflare Pages dashboard, ensure the **Build command** is set to `npm run build`.
+
+### Environment Variables
 If you move your Firebase config to environment variables:
 1. Go to **Settings** > **Variables and Secrets** in the Pages dashboard.
 2. Add your `VITE_FIREBASE_*` variables.
