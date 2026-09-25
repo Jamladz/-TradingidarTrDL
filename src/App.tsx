@@ -16,13 +16,19 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let timeoutId: any;
+
     async function initApp() {
-      if (!isReady || !user) return;
+      if (!isReady || !user) {
+        // If not in Telegram, wait 2 seconds then stop loading to show fallback UI
+        timeoutId = setTimeout(() => {
+          if (loading) setLoading(false);
+        }, 2000);
+        return;
+      }
 
       try {
-        // Simple anonymous sign-in for now, as we use Telegram ID for auth logic
-        // In a real prod app, you'd verify the hash on the backend
-        const userCredential = await signInAnonymously(auth);
+        await signInAnonymously(auth);
         const userId = user.id.toString();
         
         const userDocRef = doc(db, 'users', userId);
@@ -36,7 +42,7 @@ export default function App() {
             lastName: user.last_name || '',
             photoUrl: user.photo_url || '',
             createdAt: serverTimestamp(),
-            isAdmin: false // Default to false
+            isAdmin: false
           });
         } else {
           setIsAdmin(userDoc.data()?.isAdmin || false);
@@ -49,6 +55,9 @@ export default function App() {
     }
 
     initApp();
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [isReady, user]);
 
   if (loading) {

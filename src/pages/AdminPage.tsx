@@ -31,14 +31,20 @@ export function AdminPage() {
 
   useEffect(() => {
     const q = query(collection(db, 'signals'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const signalData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Signal[];
-      setSignals(signalData);
-      setLoading(false);
-    });
+    const unsubscribe = onSnapshot(q, 
+      (snapshot) => {
+        const signalData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Signal[];
+        setSignals(signalData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Firestore admin subscription error:', error);
+        setLoading(false);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
